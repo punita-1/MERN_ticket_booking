@@ -1,0 +1,78 @@
+/* General body settings */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Hero Panel */
+.hero-panel {
+    display: flex;
+    /* Align items horizontally */
+    justify-content: space-between;
+    /* Distribute space evenly across the container */
+    margin-top: 80px;
+    /* Offset for the fixed navbar */
+    padding: 20px;
+    width: 100vw;
+    /* Full width of the viewport */
+    box-sizing: border-box;
+    /* Ensure padding is included in width calculation */
+    overflow-x: hidden;
+    /* Hide horizontal scroll bar */
+}
+
+/* Hero Item */
+.hero-item {
+    text-align: center;
+    margin: 10px;
+    flex: 0 0 16%;
+    /* Adjust the width of each item (6 items, so 100/6 = 16%) */
+    max-width: 200px;
+    /* Limit the max width of each item */
+}
+
+/* Hero Card Style */
+.hero-card {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.hero-card:hover {
+    background-color: #555;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Hero Item Links */
+.hero-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.hero-item h3 {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .hero-panel {
+        flex-direction: column;
+        /* Stack items vertically on smaller screens */
+        align-items: center;
+        /* Center items in the column */
+        justify-content: center;
+        /* Align the content centrally */
+    }
+
+    .hero-item {
+        width: 80%;
+        /* Make items take up most of the screen width on mobile */
+        margin-bottom: 10px;
+        /* Space between items */
+    }
+}
