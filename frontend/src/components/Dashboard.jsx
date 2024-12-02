@@ -1,129 +1,149 @@
-import React, { useEffect, useState } from 'react';
-import { getTrains, getFlights, getHotels, getCabs } from '../api';
-import { Button, Card, CardContent, Typography } from '@mui/material';
-
+import React from 'react';
+import Navbar from './Navbar';
+import { Container, Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
+import { Link } from 'react-router-dom';
 const Dashboard = () => {
-    const [trains, setTrains] = useState([]);
-    const [flights, setFlights] = useState([]);
-    const [hotels, setHotels] = useState([]);
-    const [cabs, setCabs] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const trainData = await getTrains('New York', 'Washington DC', '2024-12-01T08:00:00Z');
-                const flightData = await getFlights('New York', 'Los Angeles', '2024-12-01T10:00:00Z');
-                const hotelData = await getHotels('Miami');
-                const cabData = await getCabs('New York', 'Sedan');
-
-                setTrains(trainData);
-                setFlights(flightData);
-                setHotels(hotelData);
-                setCabs(cabData);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data for dashboard:', error);
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const handleBooking = (type, id) => {
-        // Handle the booking process for each service type (train, flight, hotel, cab)
-        console.log(`Booking ${type} with ID: ${id}`);
-    };
-
-    if (loading) {
-        return <Typography variant="h5">Loading...</Typography>;
-    }
-
     return (
-        <div>
-            <Typography variant="h4" gutterBottom>Dashboard</Typography>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'auto' }}>
+            <Navbar />
 
-            {/* Train Section */}
-            <Typography variant="h6" gutterBottom>Trains</Typography>
-            {trains.length > 0 ? (
-                <div>
-                    {trains.map((train) => (
-                        <Card key={train._id} sx={{ marginBottom: '16px' }}>
-                            <CardContent>
-                                <Typography variant="h6">{train.name}</Typography>
-                                <Typography variant="body2">From: {train.source} to {train.destination}</Typography>
-                                <Typography variant="body2">Departure: {new Date(train.departureTime).toLocaleString()}</Typography>
-                                <Typography variant="body2">Price: ${train.price}</Typography>
-                                <Typography variant="body2">Available Seats: {train.availableSeats}</Typography>
-                                <Button onClick={() => handleBooking('Train', train._id)} variant="contained" color="primary">Book Now</Button>
+            {/* Hero Section */}
+            <Box
+                sx={{
+                    backgroundImage: 'url(https://via.placeholder.com/1500)', // Replace with your image URL
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    color: 'white',
+                    minHeight: '60vh', // Ensure a minimum height for the Hero Section
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    overflow: 'hidden', // Prevent overflow from affecting the layout
+                }}
+            >
+                <Container>
+                    <Typography variant="h3" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                        Welcome to Your Ticket Booking Hub
+                    </Typography>
+                    <Typography variant="h5" sx={{ marginBottom: 3 }}>
+                        Book your tickets for trains, flights, hotels, and cabs all in one place.
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        href="#explore" // Link to explore section or another page
+                    >
+                        Start Booking Now
+                    </Button>
+                </Container>
+            </Box>
+
+            {/* Services Section */}
+            <Container sx={{ marginTop: 5 }}>
+                <Typography variant="h4" sx={{ textAlign: 'center', marginBottom: 4 }}>
+                    Our Services
+                </Typography>
+                <Grid container spacing={3} justifyContent="center">
+                    {/* Train Service */}
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Card>
+                            <CardContent sx={{ textAlign: 'center' }}>
+                                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                                    Train Booking
+                                </Typography>
+                                <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                                    Book your train tickets effortlessly for all major routes.
+                                </Typography>
+                                <Link to="/train-booking">
+                                    <Button variant="contained" color="primary">
+                                        Book Train
+                                    </Button>
+                                </Link>
                             </CardContent>
                         </Card>
-                    ))}
-                </div>
-            ) : (
-                <Typography>No trains available</Typography>
-            )}
+                    </Grid>
 
-            {/* Flight Section */}
-            <Typography variant="h6" gutterBottom>Flights</Typography>
-            {flights.length > 0 ? (
-                <div>
-                    {flights.map((flight) => (
-                        <Card key={flight._id} sx={{ marginBottom: '16px' }}>
-                            <CardContent>
-                                <Typography variant="h6">{flight.airline}</Typography>
-                                <Typography variant="body2">From: {flight.source} to {flight.destination}</Typography>
-                                <Typography variant="body2">Departure: {new Date(flight.departureTime).toLocaleString()}</Typography>
-                                <Typography variant="body2">Price: ${flight.price}</Typography>
-                                <Typography variant="body2">Available Seats: {flight.availableSeats}</Typography>
-                                <Button onClick={() => handleBooking('Flight', flight._id)} variant="contained" color="primary">Book Now</Button>
+                    {/* Flight Service */}
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Card>
+                            <CardContent sx={{ textAlign: 'center' }}>
+                                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                                    Flight Booking
+                                </Typography>
+                                <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                                    Find and book flights for your next travel destination.
+                                </Typography>
+                                <Link to="/flight-booking">
+                                    <Button variant="contained" color="primary">
+                                        Book Flight
+                                    </Button>
+                                </Link>
+
                             </CardContent>
                         </Card>
-                    ))}
-                </div>
-            ) : (
-                <Typography>No flights available</Typography>
-            )}
+                    </Grid>
 
-            {/* Hotel Section */}
-            <Typography variant="h6" gutterBottom>Hotels</Typography>
-            {hotels.length > 0 ? (
-                <div>
-                    {hotels.map((hotel) => (
-                        <Card key={hotel._id} sx={{ marginBottom: '16px' }}>
-                            <CardContent>
-                                <Typography variant="h6">{hotel.name}</Typography>
-                                <Typography variant="body2">Location: {hotel.location}</Typography>
-                                <Typography variant="body2">Price Per Night: ${hotel.pricePerNight}</Typography>
-                                <Typography variant="body2">Available Rooms: {hotel.availableRooms}</Typography>
-                                <Button onClick={() => handleBooking('Hotel', hotel._id)} variant="contained" color="primary">Book Now</Button>
+                    {/* Hotel Service */}
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Card>
+                            <CardContent sx={{ textAlign: 'center' }}>
+                                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                                    Hotel Booking
+                                </Typography>
+                                <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                                    Book the best hotels at your travel destination.
+                                </Typography>
+                                <Link to="/hotel-booking">
+                                    <Button variant="contained" color="primary">
+                                        Book Hotel
+                                    </Button>
+                                </Link>
+
                             </CardContent>
                         </Card>
-                    ))}
-                </div>
-            ) : (
-                <Typography>No hotels available</Typography>
-            )}
+                    </Grid>
 
-            {/* Cab Section */}
-            <Typography variant="h6" gutterBottom>Cabs</Typography>
-            {cabs.length > 0 ? (
-                <div>
-                    {cabs.map((cab) => (
-                        <Card key={cab._id} sx={{ marginBottom: '16px' }}>
-                            <CardContent>
-                                <Typography variant="h6">{cab.cabType}</Typography>
-                                <Typography variant="body2">Location: {cab.location}</Typography>
-                                <Typography variant="body2">Price Per Ride: ${cab.pricePerRide}</Typography>
-                                <Button onClick={() => handleBooking('Cab', cab._id)} variant="contained" color="primary">Book Now</Button>
+                    {/* Cab Service */}
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Card>
+                            <CardContent sx={{ textAlign: 'center' }}>
+                                <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+                                    Cab Booking
+                                </Typography>
+                                <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                                    Get a cab for your journey with ease and comfort.
+                                </Typography>
+                                <Link to="/cab-booking">
+                                    <Button variant="contained" color="primary">
+                                        Book Cab
+                                    </Button>
+                                </Link>
                             </CardContent>
                         </Card>
-                    ))}
-                </div>
-            ) : (
-                <Typography>No cabs available</Typography>
-            )}
+                    </Grid>
+                </Grid>
+            </Container>
+
+            {/* Text Content Below */}
+            <br />
+            {/* Text Content Below */}
+            <br />
+
+            {/* Footer Section */}
+            <Box
+                sx={{
+                    backgroundColor: '#333',
+                    color: 'white',
+                    padding: '20px 0',
+                    textAlign: 'center',
+                    marginTop: 'auto',
+                }}
+            >
+                <Typography variant="body1">&copy; 2024 Your Ticket Booking Hub. All rights reserved.</Typography>
+                <Typography variant="body2">Follow us on social media: Facebook | Twitter | Instagram</Typography>
+            </Box>
         </div>
     );
 };

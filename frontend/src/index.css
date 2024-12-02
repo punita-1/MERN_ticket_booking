@@ -28,8 +28,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: #242424;
-  overflow: hidden; /* Prevent scroll during splash */
+  /* overflow: hidden; Prevent scroll during splash */
 }
+
 
 
 h1 {

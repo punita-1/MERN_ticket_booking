@@ -3,6 +3,9 @@
   margin: 0;
   padding: 0;
   text-align: center;
+  /* Allow scrolling on the Dashboard container */
+  overflow: auto;
+  /* Allow scrolling in the root element */
 }
 
 .logo {
