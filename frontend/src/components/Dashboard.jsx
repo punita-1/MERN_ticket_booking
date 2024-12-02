@@ -1,19 +1,6 @@
-// import React from 'react';
-
-// const Dashboard = () => {
-//     return (
-//         <div>
-//             <h1>Welcome to the Dashboard</h1>
-//         </div>
-//     );
-// };
-
-// export default Dashboard;
-
-// src/components/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import { getTrains, getFlights, getHotels, getCabs } from '../api';
-import { Button, Card, CardContent, Typography } from '@mui/material'; 
+import { Button, Card, CardContent, Typography } from '@mui/material';
 
 const Dashboard = () => {
     const [trains, setTrains] = useState([]);
@@ -29,7 +16,7 @@ const Dashboard = () => {
                 const flightData = await getFlights('New York', 'Los Angeles', '2024-12-01T10:00:00Z');
                 const hotelData = await getHotels('Miami');
                 const cabData = await getCabs('New York', 'Sedan');
-                
+
                 setTrains(trainData);
                 setFlights(flightData);
                 setHotels(hotelData);
@@ -56,7 +43,7 @@ const Dashboard = () => {
     return (
         <div>
             <Typography variant="h4" gutterBottom>Dashboard</Typography>
-            
+
             {/* Train Section */}
             <Typography variant="h6" gutterBottom>Trains</Typography>
             {trains.length > 0 ? (

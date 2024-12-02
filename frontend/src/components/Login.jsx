@@ -1,151 +1,66 @@
-// import React, { useState } from 'react';
-// import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
-
-// const Login = () => {
-//   const [formData, setFormData] = useState({
-//     email: '',
-//     password: ''
-//   });
-
-//   const [errorMessage, setErrorMessage] = useState('');
-//   const history = useNavigate();
-
-//   // Handle form field changes
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value
-//     });
-//   };
-
-//   // Handle form submission
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const response = await axios.post('http://localhost:5000/login', formData);
-//       console.log(response.data);
-//       localStorage.setItem('token', response.data.token);  // Save JWT token in localStorage
-//       history.push('/dashboard'); // Redirect to the dashboard after login
-//     } catch (error) {
-//       setErrorMessage(error.response.data.message || 'Error occurred');
-//     }
-//   };
-
-//   return (
-//     <div className="login-container">
-//       <h2>Login to Ticket Booking</h2>
-//       <form onSubmit={handleSubmit}>
-//         <div>
-//           <label>Email:</label>
-//           <input
-//             type="email"
-//             name="email"
-//             value={formData.email}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         <div>
-//           <label>Password:</label>
-//           <input
-//             type="password"
-//             name="password"
-//             value={formData.password}
-//             onChange={handleChange}
-//             required
-//           />
-//         </div>
-//         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-//         <button type="submit">Login</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { loginUser } from '../api/auth'; // Replace with your actual API import
+import './Login.css'; // Importing the CSS file
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();  // Use navigate from 'react-router-dom' for redirects
-
-  // Handle form field changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate form fields (optional)
-    if (!formData.email || !formData.password) {
-      setErrorMessage('Please fill in both fields');
-      return;
-    }
+    setIsLoading(true);
+    setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);  // Corrected URL
-      console.log(response.data);
-
-      // Store JWT token in localStorage
-      localStorage.setItem('token', response.data.token);
-
-      // Redirect to dashboard
-      navigate('/dashboard');
-    } catch (error) {
-      // Handle error more gracefully
-      if (error.response) {
-        setErrorMessage(error.response.data.msg || 'Error occurred');
+      const response = await loginUser({ email, password });
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        navigate('/dashboard');
       } else {
-        setErrorMessage('Server error or no response');
+        setError(response.message || 'Login failed');
       }
+    } catch (err) {
+      setError(err.message || 'An error occurred');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Login to Ticket Booking</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <button type="submit">Login</button>
+      <h2 className="login-title">Login</h2>
+      {error && <div className="error-message">{error}</div>}
+      <form onSubmit={handleSubmit} className="login-form">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+          className="login-input"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+          className="login-input"
+        />
+        <button type="submit" disabled={isLoading} className="login-button">
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
+      {isLoading && <div className="loader"></div>}
+      <div className="register-link">
+        <Link to="/register">Don't have an account? Register</Link>
+      </div>
     </div>
   );
-};
+}
 
 export default Login;
